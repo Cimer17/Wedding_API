@@ -55,7 +55,7 @@ class GuestCreate(BaseModel):
     drink: List[str] = []
 
 # === FastAPI приложение ===
-app = FastAPI()
+app = FastAPI(root_path="/api")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Разрешить все источники
@@ -76,7 +76,7 @@ def get_db():
 Base.metadata.create_all(bind=engine)
 
 # === POST запрос для создания нового гостя ===
-@app.post("api/users/")
+@app.post("/users")
 def create_guest(guest: GuestCreate, db: Session = Depends(get_db)):
     db_guest = Guests(
         presence=guest.presence,
@@ -93,7 +93,7 @@ def create_guest(guest: GuestCreate, db: Session = Depends(get_db)):
     return {"message": "User added successfully", "user": guest}
 
 # === GET запрос для просмотра всех гостей ===
-@app.get("api/users/")
+@app.get("/users")
 def get_guests(db: Session = Depends(get_db)):
     guests = db.query(Guests).all()
     return {"guests": guests}
