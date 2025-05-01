@@ -76,7 +76,7 @@ def get_db():
 Base.metadata.create_all(bind=engine)
 
 # === POST запрос для создания нового гостя ===
-@app.post("/users/")
+@app.post("api/users/")
 def create_guest(guest: GuestCreate, db: Session = Depends(get_db)):
     db_guest = Guests(
         presence=guest.presence,
@@ -93,7 +93,7 @@ def create_guest(guest: GuestCreate, db: Session = Depends(get_db)):
     return {"message": "User added successfully", "user": guest}
 
 # === GET запрос для просмотра всех гостей ===
-@app.get("/users/")
+@app.get("api/users/")
 def get_guests(db: Session = Depends(get_db)):
     guests = db.query(Guests).all()
     return {"guests": guests}
