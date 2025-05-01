@@ -7,7 +7,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker, Session
 from typing import List
 
 # === Настройка базы данных ===
-DATABASE_URL = "sqlite:///./guests.db"
+DATABASE_URL = "sqlite:///./database/guests.db"
 
 engine = create_engine(
     DATABASE_URL, connect_args={"check_same_thread": False}
