@@ -1,7 +1,9 @@
 import json
 import os
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, Form, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from sqlalchemy import create_engine, Column, Integer, String, Boolean, TypeDecorator, TEXT
 from sqlalchemy.orm import declarative_base, sessionmaker, Session
@@ -66,6 +68,9 @@ app.add_middleware(
     allow_headers=["*"],  # Разрешить все заголовки
 )
 
+# === Настройка Jinja2 для шаблонов ===
+templates = Jinja2Templates(directory="templates")
+
 # === Зависимость для получения сессии БД ===
 def get_db():
     db = SessionLocal()
@@ -77,7 +82,48 @@ def get_db():
 # === Создание таблиц (один раз) ===
 Base.metadata.create_all(bind=engine)
 
-# === POST запрос для создания нового гостя ===
+# === GET запрос для отображения формы ===
+@app.get("/", response_class=HTMLResponse)
+async def read_form(request: Request):
+    return templates.TemplateResponse("guest_form.html", {"request": request})
+
+# === POST запрос для обработки данных из формы ===
+@app.post("/")
+async def submit_guest(
+    request: Request,
+    full_name: str = Form(...),
+    phone: str = Form(...),
+    presence: bool = Form(False),
+    guestsAllowed: bool = Form(False),
+    guests_str: str = Form("[]"),
+    willDring: bool = Form(False),
+    drink_str: str = Form("[]"),
+    db: Session = Depends(get_db),
+):
+    guest_data = GuestCreate(
+        presence=presence,
+        full_name=full_name,
+        phone=phone,
+        guestsAllowed=guestsAllowed,
+        guests=json.loads(guests_str),
+        willDring=willDring,
+        drink=json.loads(drink_str),
+    )
+    db_guest = Guests(
+        presence=guest_data.presence,
+        full_name=guest_data.full_name,
+        phone=guest_data.phone,
+        guestsAllowed=guest_data.guestsAllowed,
+        guests=guest_data.guests,
+        willDring=guest_data.willDring,
+        drink=guest_data.drink,
+    )
+    db.add(db_guest)
+    db.commit()
+    db.refresh(db_guest)
+    return templates.TemplateResponse("submission_success.html", {"request": request, "full_name": full_name})
+
+# === POST запрос для создания нового гостя (остается без изменений) ===
 @app.post("/users")
 def create_guest(guest: GuestCreate, db: Session = Depends(get_db)):
     db_guest = Guests(
@@ -94,7 +140,7 @@ def create_guest(guest: GuestCreate, db: Session = Depends(get_db)):
     db.refresh(db_guest)
     return {"message": "User added successfully", "user": guest}
 
-# === GET запрос для просмотра всех гостей ===
+# === GET запрос для просмотра всех гостей (остается без изменений) ===
 @app.get("/users")
 def get_guests(db: Session = Depends(get_db)):
     guests = db.query(Guests).all()

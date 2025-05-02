@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форма регистрации гостя</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 66.666%; /* Примерно 2/3 */
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+            padding: 0 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .form-group input[type="text"] {
+            width: calc(100% - 16px);
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .form-group small {
+            display: block;
+            margin-top: 5px;
+            color: #777;
+        }
+        .form-group.checkbox-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .checkbox-label {
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+            width: 100%;
+        }
+        .checkbox-label span {
+            flex-grow: 1;
+        }
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            border-radius: 12px;
+            background-color: #ccc;
+            transition: background-color 0.3s ease;
+        }
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #fff;
+            transition: transform 0.3s ease;
+        }
+        input[type="checkbox"]:checked + .toggle-switch {
+            background-color: #4CAF50; /* Пример зеленого цвета */
+        }
+        input[type="checkbox"]:checked + .toggle-switch::after {
+            transform: translateX(20px);
+        }
+        .alcohol-options {
+            display: flex;
+            flex-direction: column;
+            margin-top: 10px;
+        }
+        .alcohol-options label {
+            font-weight: normal;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .alcohol-options label input[type="checkbox"] {
+            margin-right: 8px;
+        }
+        button {
+            background-color: #4CAF50; /* Пример зеленого цвета */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            display: block;
+            width: 41.666%; /* Примерно 5/12 от 100% */
+            margin: 20px auto 0;
+        }
+        button:hover {
+            background-color: #367c39;
+        }
+        .alert {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 4px;
+            padding: 10px;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <section class="w-2/3 mx-auto">
+            <div class="my-7">
+                <form action="/api/users/" method="post" class="flex flex-col w-full mx-auto">
+                    <div class="form-group checkbox-group px-4 mb-6">
+                        <label class="w-full inline-flex justify-between items-center cursor-pointer checkbox-label">
+                            <span>
+                                <h3 class="text-lg font-medium text-gray-900">
+                                    Я подтверждаю свое присутствие
+                                </h3>
+                            </span>
+                            <input type="checkbox" class="sr-only" id="presence" name="presence">
+                            <div class="toggle-switch"></div>
+                        </label>
+                    </div>
+
+                    <div id="presence-fields" style="opacity: 0; max-height: 0; overflow: hidden; transition: all 0.3s ease-in-out;">
+                        <div class="form-group mb-6 px-4">
+                            <label for="full_name" class="block mb-2">
+                                <h3 class="text-lg font-medium text-gray-900">
+                                    Впишите ваше имя и фамилию
+                                </h3>
+                            </label>
+                            <input type="text" id="full_name" name="full_name" class="block w-full p-4 text-gray-900 border-gray-50 rounded-lg bg-gray-50 text-base shadow-lg" placeholder="Имя и фамилия" required>
+                        </div>
+
+                        <div class="form-group mb-6 px-4">
+                            <label for="phone" class="block mb-2">
+                                <h3 class="text-lg font-medium text-gray-900">
+                                    Телефон
+                                </h3>
+                            </label>
+                            <input type="text" id="phone" name="phone" class="block w-full p-4 text-gray-900 border-gray-50 rounded-lg bg-gray-50 text-base shadow-lg" placeholder="Телефон">
+                        </div>
+
+                        <div class="form-group checkbox-group px-4 mb-4">
+                            <div class="w-full grid grid-cols-12 gap-4">
+                                <div class="col-span-10">
+                                    <h3 class="text-lg font-medium text-gray-900">
+                                        С Вами еще кто-то будет?
+                                    </h3>
+                                    <p class="text-sm text-gray-500 mt-1">
+                                        Если вы будете еще с кем-то то сообщите нам
+                                    </p>
+                                </div>
+                                <div class="col-span-2 flex justify-end">
+                                    <label class="inline-flex items-center cursor-pointer checkbox-label">
+                                        <input type="checkbox" class="sr-only" id="guestsAllowed" name="guestsAllowed">
+                                        <div class="toggle-switch"></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="guests-names" class="form-group mb-6 px-4" style="display: none;">
+                            <label for="guests" class="block">
+                                <h3 class="text-lg font-medium text-gray-900">
+                                    Впишите имена и фамилии этих людей
+                                </h3>
+                            </label>
+                            <p class="text-gray-500 text-sm mb-2">Укажите их через запятую</p>
+                            <input type="text" id="guests" name="guests" class="block w-full p-4 text-gray-900 border-gray-50 rounded-lg bg-gray-50 text-base shadow-lg" placeholder="Дмитрий Соколов, Анна Петрова">
+                        </div>
+
+                        <div class="form-group checkbox-group px-4 mb-4">
+                            <div class="w-full grid grid-cols-12 gap-4">
+                                <div class="col-span-10">
+                                    <h3 class="text-lg font-medium text-gray-900">
+                                        Будете ли вы пить?
+                                    </h3>
+                                    <p class="text-sm text-gray-500 mt-1">
+                                        Если да, то выберите какой алкоголь вы предпочитаете
+                                    </p>
+                                </div>
+                                <div class="col-span-2 flex justify-end">
+                                    <label class="inline-flex items-center cursor-pointer checkbox-label">
+                                        <input type="checkbox" class="sr-only" id="willDrink" name="willDrink">
+                                        <div class="toggle-switch"></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="alcohol-options" class="form-group flex flex-col w-full mb-6 px-4" style="display: none;">
+                            <label class="flex items-center mb-2">
+                                <input type="checkbox" id="alcohol-champagne" name="drink" value="Шампанское" class="w-5 h-5 text-custom-green-500 bg-gray-100 border border-green-500 rounded focus:ring-green-500">
+                                <span class="ms-4 text-lg font-normal text-gray-900">Шампанское</span>
+                            </label>
+                            <label class="flex items-center mb-2">
+                                <input type="checkbox" id="alcohol-whiskey" name="drink" value="Виски" class="w-5 h-5 text-custom-green-500 bg-gray-100 border border-green-500 rounded focus:ring-green-500">
+                                <span class="ms-4 text-lg font-normal text-gray-900">Виски</span>
+                            </label>
+                            <label class="flex items-center mb-2">
+                                <input type="checkbox" id="alcohol-vodka" name="drink" value="Водка" class="w-5 h-5 text-custom-green-500 bg-gray-100 border border-green-500 rounded focus:ring-green-500">
+                                <span class="ms-4 text-lg font-normal text-gray-900">Водка</span>
+                            </label>
+                            <label class="flex items-center mb-2">
+                                <input type="checkbox" id="alcohol-cognac" name="drink" value="Коньяк" class="w-5 h-5 text-custom-green-500 bg-gray-100 border border-green-500 rounded focus:ring-green-500">
+                                <span class="ms-4 text-lg font-normal text-gray-900">Коньяк</span>
+                            </label>
+                        </div>
+
+                        <div class="form-group checkbox-group px-4 mb-6">
+                            <div class="w-full grid grid-cols-12 gap-4">
+                                <div class="col-span-10">
+                                    <h3 class="text-lg font-medium text-gray-900">Клятва гостя</h3>
+                                    <p class="text-sm text-gray-500 mt-1">
+                                        Обещаю не опоздать, не напиться раньше тоста за здоровье и не спорить с
+                                        тамадой
+                                    </p>
+                                </div>
+                                <div class="col-span-2 flex justify-end">
+                                    <label class="inline-flex items-center cursor-pointer checkbox-label">
+                                        <input type="checkbox" class="sr-only" id="oath" name="oath">
+                                        <div class="toggle-switch"></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-center mt-4 px-4">
+                        <button type="submit">
+                            Отправить
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+        <div id="alert-container">
+            </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const presenceCheckbox = document.getElementById('presence');
+            const presenceFields = document.getElementById('presence-fields');
+            const guestsAllowedCheckbox = document.getElementById('guestsAllowed');
+            const guestsNamesDiv = document.getElementById('guests-names');
+            const willDrinkCheckbox = document.getElementById('willDrink');
+            const alcoholOptionsDiv = document.getElementById('alcohol-options');
+            const guestsInput = document.getElementById('guests');
+            const form = document.querySelector('form');
+            const alertContainer = document.getElementById('alert-container');
+
+            presenceCheckbox.addEventListener('change', function() {
+                presenceFields.style.maxHeight = this.checked ? presenceFields.scrollHeight + 'px' : '0';
+                presenceFields.style.opacity = this.checked ? '1' : '0';
+                presenceFields.style.overflow = 'hidden'; // Ensure smooth transition
+            });
+
+            guestsAllowedCheckbox.addEventListener('change', function() {
+                guestsNamesDiv.style.display = this.checked ? 'block' : 'none';
+            });
+
+            willDrinkCheckbox.addEventListener('change', function() {
+                alcoholOptionsDiv.style.display = this.checked ? 'flex' : 'none';
+            });
+
+            form.addEventListener('submit', async function(event) {
+                event.preventDefault();
+
+                const formData = new FormData(this);
+                const dataToSend = {};
+                formData.forEach((value, key) => {
+                    if (key === 'presence' || key === 'guestsAllowed' || key === 'willDrink' || key === 'oath') {
+                        dataToSend[key] = value === 'on';
+                    } else if (key === 'guests') {
+                        dataToSend[key] = value.split(',').map(item => item.trim()).filter(item => item !== '');
+                    } else if (key === 'drink') {
+                        if (!dataToSend['drink']) {
+                            dataToSend['drink'] = [];
+                        }
+                        dataToSend['drink'].push(value);
+                    } else {
+                        dataToSend[key] = value;
+                    }
+                });
+
+                // Преобразуем guestsAllowed и willDrink в булевы значения
+                dataToSend['guestsAllowed'] = formData.get('guestsAllowed') === 'on';
+                dataToSend['willDring'] = formData.get('willDrink') === 'on';
+
+                // Собираем выбранные напитки
+                const selectedDrinks = formData.getAll('drink');
+                dataToSend['drink'] = selectedDrinks;
+
+                try {
+                    // Симуляция задержки
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+
+                    const baseUrl = ''; // Укажите базовый URL вашего API, если необходимо
+                    const response = await fetch(`${baseUrl}/api/users/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            presence: dataToSend.presence,
+                            full_name: dataToSend.full_name,
+                            phone: dataToSend.phone,
+                            guestsAllowed: dataToSend.guestsAllowed,
+                            guests: dataToSend.guests,
+                            willDring: dataToSend.willDring,
+                            drink: dataToSend.drink
+                        })
+                    });
+
+                    const responseData = await response.json();
+
+                    if (response.ok) {
+                        const successAlert = document.createElement('div');
+                        successAlert.className = 'alert';
+                        successAlert.textContent = 'Данные сохранены!';
+                        alertContainer.appendChild(successAlert);
+                        setTimeout(() => alertContainer.removeChild(successAlert), 2000);
+                        form.reset(); // Очистка формы после успешной отправки
+                        // Сброс видимости скрытых полей
+                        presenceFields.style.maxHeight = '0';
+                        presenceFields.style.opacity = '0';
+                        presenceFields.style.overflow = 'hidden';
+                        guestsNamesDiv.style.display = 'none';
+                        alcoholOptionsDiv.style.display = 'none';
+                    } else {
+                        const errorAlert = document.createElement('div');
+                        errorAlert.className = 'alert';
+                        errorAlert.textContent = `Ошибка: ${responseData.message || 'Неизвестная ошибка'}`;
+                        alertContainer.appendChild(errorAlert);
+                        setTimeout(() => alertContainer.removeChild(errorAlert), 2000);
+                    }
+
+                } catch (error) {
+                    const errorAlert = document.createElement('div');
+                    errorAlert.className = 'alert';
+                    errorAlert.textContent = 'Произошла неизвестная ошибка при отправке данных.';
+                    alertContainer.appendChild(errorAlert);
+                    setTimeout(() => alertContainer.removeChild(errorAlert), 2000);
+                    console.error("Ошибка отправки:", error);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
