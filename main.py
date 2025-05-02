@@ -1,4 +1,5 @@
 import json
+import os
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, Depends
 from pydantic import BaseModel
@@ -8,6 +9,7 @@ from typing import List
 
 # === Настройка базы данных ===
 DATABASE_URL = "sqlite:///./database/guests.db"
+origins = [os.environ.get("REACT_APP_API_URL", "http://localhost:8000")]
 
 engine = create_engine(
     DATABASE_URL, connect_args={"check_same_thread": False}
