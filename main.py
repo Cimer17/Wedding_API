@@ -60,7 +60,7 @@ class GuestCreate(BaseModel):
 app = FastAPI(root_path="/api")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Разрешить все источники
+    allow_origins=origins,  # Разрешить все источники
     allow_credentials=True,
     allow_methods=["*"],  # Разрешить все HTTP-методы
     allow_headers=["*"],  # Разрешить все заголовки
