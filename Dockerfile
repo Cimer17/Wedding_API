@@ -14,6 +14,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app/
 
 # Открываем порт для FastAPI
-EXPOSE 8000
-
-CMD ["fastapi", "run", "main.py", "--port", "8000", "--proxy-headers"]
+EXPOSE 3478
