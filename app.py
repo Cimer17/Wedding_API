@@ -97,8 +97,3 @@ def create_guest(guest: GuestCreate, db: Session = Depends(get_db)):
 def get_guests(db: Session = Depends(get_db)):
     guests = db.query(Guests).all()
     return {"guests": guests}
-
-
-if __name__ == "__main__":
-    port = 3478
-    uvicorn.run(app, host="0.0.0.0", port=port)
