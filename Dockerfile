@@ -16,4 +16,4 @@ COPY . /app/
 # Открываем порт для FastAPI
 EXPOSE 8000
 
-CMD ["fastapi", "run", "main.py", "--port", "8000", "--proxy-headers"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--ssl-cert", "/app/ssl/certificate.crt", "--ssl-key", "/app/ssl/private.key"]
