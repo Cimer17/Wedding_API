@@ -15,3 +15,5 @@ COPY . /app/
 
 # Открываем порт для FastAPI
 EXPOSE 3478
+
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "3478"]
