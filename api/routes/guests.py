@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from schemas.guestsSC import GuestCreate
 from db.session import get_db
-from crud.guest_crud import check_phone_guest, create_guest, dellete_guest, get_all_guests
+from crud.guest_crud import *
 
 router = APIRouter()
 

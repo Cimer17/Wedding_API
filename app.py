@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from api.routes import guests
 from db.init_db import init_db
 
-app = FastAPI()  # убрали root_path
+app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
