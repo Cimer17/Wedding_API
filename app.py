@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from api.routes import guests
 from db.init_db import init_db
 
-app = FastAPI(root_path="/api")
+app = FastAPI()  # убрали root_path
 
 app.add_middleware(
     CORSMiddleware,
@@ -16,5 +16,5 @@ app.add_middleware(
 # Инициализация БД
 init_db()
 
-# Подключаем роуты
-app.include_router(guests.router, prefix="/users", tags=["Guests"])
+# Роуты по пути /api/users
+app.include_router(guests.router, prefix="/api/users", tags=["Guests"])
