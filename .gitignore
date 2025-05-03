@@ -1,0 +1,32 @@
+# Python cache files
+*.py[cod]
+!src/__pycache__/
+
+# Virtual environment
+venv/
+env/
+
+# Environment variables
+*.env
+
+# Logs
+*.log
+
+# Byte-compiled / optimized / DLL files
+*.pyc
+*.pyo
+*.pyd
+
+# Test coverage reports
+htmlcov/
+.coverage
+.tox/
+.nox/
+
+# IDE specific files
+.vscode/
+.idea/
+
+# FastAPI specific
+*.db
+*.sqlite3
